@@ -2,12 +2,12 @@ import random
 
 #O vide
 #-1 bombe
-def CreationGrille(nbLignes,nbColonnes,n) :
-    grille=[[0 for i in range(nbColonnes)] for j in range(nbLignes)]
+def CreationGrille(grille,nbLignes,nbColonnes,n, a,b) :
+    l=PositionsAutour(grille,a,b)
     for i in range(n) :
         x=random.randint(0,nbLignes-1)
         y=random.randint(0,nbColonnes-1)
-        while (grille[x][y]==-1) :
+        while (grille[x][y]==-1 or (x==a and y==b) or ([x,y] in l)) :
             x=random.randint(0,nbLignes-1)
             y=random.randint(0,nbColonnes-1)
         grille[x][y]=-1
