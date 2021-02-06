@@ -145,7 +145,7 @@ def start():
         can.bind("<Button-3>",fonc3)
 
         can.pack()
-        
+    """    
     choix=Tk()
     canchoix=Canvas(choix,width=400,height=150, bg="dark grey")
     canchoix.create_text(200,50,text="Quel est le nombre de bombes ?",font=("Arial",20))
@@ -179,13 +179,14 @@ def start():
         
     canchoix.bind("<Button-1>",fonc)
     """
+    print("Quel est le nombre de bombes ?")
     nbBombes=int(input())
-    canchoix.create_text(200,100,text=nbBombes,font=("Arial",20))
+    #canchoix.create_text(200,100,text=nbBombes,font=("Arial",20))
     print("Quel est le nombre de colonnes ?")
     nbCol=int(input())
     print("Quel est le nombre de lignes ?")
     nbLignes=int(input())
     jeu(nbBombes,nbCol,nbLignes)
-    """
+    
 
 start()
