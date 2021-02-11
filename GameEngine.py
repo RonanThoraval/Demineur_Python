@@ -5,16 +5,16 @@ class start:
     def __init__(self) :
         
         self.choix=Tk()
-        self.choix.title("Menu des tailels")
+        self.choix.title("Menu des tailles")
         self.canchoix=Canvas(self.choix,width=800,height=800, bg="black")
-        self.canchoix.create_rectangle(5,5,397,397,fill="dark grey")
+        self.canchoix.create_rectangle(5,5,397,397,fill="white")
         self.canchoix.create_rectangle(402,5,795,397,fill="dark grey")
-        self.canchoix.create_rectangle(5,402,397,795,fill="dark grey")
-        self.canchoix.create_rectangle(402,402,795,795,fill="dark grey")
-        self.canchoix.create_text(200,200,fill="black",text="Petit jeu")
-        self.canchoix.create_text(600,200,fill="black",text="Moyen jeu")
-        self.canchoix.create_text(200,600,fill="black",text="Grand jeu")
-        self.canchoix.create_text(600,600,fill="black",text="Jeu")
+        self.canchoix.create_rectangle(5,402,397,795,fill="grey20")
+        self.canchoix.create_rectangle(402,402,795,795,fill="pink")
+        self.canchoix.create_text(200,200,fill="black",text="Facile : 8x8",font=("Arial",25))
+        self.canchoix.create_text(600,200,fill="grey35",text="Moyen : 13x13",font=("Arial",25))
+        self.canchoix.create_text(200,600,fill="white",text="Difficile : 17x17",font=("Arial",25))
+        self.canchoix.create_text(600,600,fill="dark slate blue",text="Jeu personnalisable",font=("Arial",25))
         
         self.canchoix.pack()
 
@@ -23,30 +23,102 @@ class start:
     
         
     def f(self) :
-        print("Quel est le nombre de colonnes ?")
-        nbCol=int(input())
-        print("Quel est le nombre de lignes ?")
-        nbLignes=int(input())
-        print("Quel est le nombre de bombes ?")
-        nbBombes=int(input())
-        return(jeu(nbCol,nbLignes,nbBombes))
+        tab=[]
+
+        def isDigit(c):
+            return c in ["1","2","3","4","5","6","7","8","9","0"]
+
+        
+        ###Perso1###
+        perso1=Tk()
+        canPerso1=Label(perso1,text="Paramètres")
+        canPerso1.grid(row=0, columnspan=2, pady=8)
+        
+        def g1(event) :
+            tab.append(int(rep1.get()))
+            perso1.destroy()
+            h()
+
+            
+        lbl_reponse = Label(perso1, text="Nombre de Lignes : ")
+        lbl_reponse.grid(row=1, column=0, pady=5, padx=5)
+
+        rep1=Entry(perso1)
+        rep1.grid(row=1, column=1, pady=5, padx=5)
+        rep1.bind("<Return>", g1)
+
+
+
+
+
+        ###Perso2##
+        def h():
+            perso2=Tk()
+            canPerso2=Label(perso2,text="Paramètres")
+            canPerso2.grid(row=0, columnspan=2, pady=8)
+
+            def g2(event) :
+                tab.append(int(rep2.get()))
+                perso2.destroy()
+                i()
+
+
+            lbl_reponse = Label(perso2, text="Nombre de Colonnes : ")
+            lbl_reponse.grid(row=1, column=0, pady=5, padx=5)
+                
+            rep2=Entry(perso2)
+            rep2.grid(row=1, column=1, pady=5, padx=5)
+            rep2.bind("<Return>", g2)
+
+
+
+        ###Perso3###
+        def i():
+            perso3=Tk()
+            canPerso3=Label(perso3,text="Paramètres")
+            canPerso3.grid(row=0, columnspan=2, pady=8)
+
+            def g3(event) :
+                tab.append(int(rep3.get()))
+                perso3.destroy()
+                self.choix.destroy()
+                GameEngine(jeu(tab[0],tab[1],tab[2]))
+
+
+            lbl_reponse = Label(perso3, text="Nombre de Bombes : ")
+            lbl_reponse.grid(row=1, column=0, pady=5, padx=5)
+            
+
+            rep3=Entry(perso3)
+            rep3.grid(row=1, column=1, pady=5, padx=5)
+            rep3.bind("<Return>", g3)
+
+
+
+            
+        
+
+       
+
+        
 
     def fonc(self,event):
             
         x = event.x
         y = event.y
-        if (x<=397 and y <=397 and x>=5 and y>=5 ) :
-            j=jeu(8,8,10)
-        elif (x>=402 and x<=795 and y>=5 and y<=397) :
-            j=jeu(13,13,40)
-        elif (x>=5 and x<=397 and y>=402 and y<=795) :
-            j=jeu(17,17,75)
-        elif (x>=402 and y>=402 and x<=795 and y<=795) :
-            j=self.f()
+        if (x>=402 and y>=402 and x<=795 and y<=795) :
+            self.f()
         else :
-            return
-        self.choix.destroy()
-        GameEngine(j)
+            if (x<=397 and y <=397 and x>=5 and y>=5 ) :
+                j=jeu(8,8,10)
+            elif (x>=402 and x<=795 and y>=5 and y<=397) :
+                j=jeu(13,13,40)
+            elif (x>=5 and x<=397 and y>=402 and y<=795) :
+                j=jeu(17,17,75)
+            self.choix.destroy()
+            GameEngine(j)
+        return
+        
         
 
     
@@ -59,6 +131,7 @@ start()
 class GameEngine :
 
     def __init__(self,jeu) :
+        
         self.jeu=jeu
         self.fenetre=Tk()
         self.fenetre.title("Démineur")
@@ -75,8 +148,8 @@ class GameEngine :
         self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
         self.can.create_image(self.c,self.jeu.nbLigne*self.c+self.StatusBar/2, anchor=CENTER, image=self.drapeau)
         self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill="black",font=("Arial",15))
-        self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+1,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-1,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="yellow")
-        self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+1,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-1,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="yellow")
+        self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+1,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-1,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="light sea green")
+        self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+1,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-1,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="HotPink3")
         self.can.create_text(self.jeu.nbCol*self.c//2,self.jeu.nbLigne*self.c+self.StatusBar/2,text="Changer de diffilculté",font=("Arial",10))
         self.can.create_text(self.jeu.nbCol*self.c*(5/6),self.jeu.nbLigne*self.c+self.StatusBar/2,text="Nouvelle Partie",font=("Arial",10))
         
@@ -115,6 +188,7 @@ class GameEngine :
     
 
 
+    
 
     def fonc1(self,event) :                
             x,y=event.x,event.y
@@ -180,8 +254,8 @@ class GameEngine :
                 self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
                 self.can.create_image(self.c,self.jeu.nbLigne*self.c+self.StatusBar/2, anchor=CENTER, image=self.drapeau)
                 self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill="black",font=("Arial",15))
-                self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="yellow")
-                self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="yellow")
+                self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="light sea green")
+                self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="HotPink3")
                 self.can.create_text(self.jeu.nbCol*self.c//2,self.jeu.nbLigne*self.c+self.StatusBar/2,text="Changer de diffilculté",font=("Arial",10))
                 self.can.create_text(self.jeu.nbCol*self.c*(5/6),self.jeu.nbLigne*self.c+self.StatusBar/2,text="Nouvelle Partie",font=("Arial",10))
             else :
@@ -190,8 +264,8 @@ class GameEngine :
                 self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
                 self.can.create_image(self.c,self.jeu.nbLigne*self.c+self.StatusBar/2, anchor=CENTER, image=self.drapeau)
                 self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill="black",font=("Arial",15))
-                self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="yellow")
-                self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="yellow")
+                self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="light sea green")
+                self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="HotPink3")
                 self.can.create_text(self.jeu.nbCol*self.c//2,self.jeu.nbLigne*self.c+self.StatusBar/2,text="Changer de diffilculté",font=("Arial",10))
                 self.can.create_text(self.jeu.nbCol*self.c*(5/6),self.jeu.nbLigne*self.c+self.StatusBar/2,text="Nouvelle Partie",font=("Arial",10))
                 self.can.create_image(x,y,anchor=NW,image=self.drapeau)
