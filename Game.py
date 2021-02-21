@@ -70,8 +70,3 @@ class jeu :
                 cpt+=1
         return cpt
 
-    
-                
-                    
-               
-        
