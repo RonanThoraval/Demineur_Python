@@ -16,7 +16,7 @@ class GameEngine :
         self.estLePremierMouv=True
 
         self.couleurs=["blue","green","red","purple","yellow","orange","white","brown"]
-        self.couleursTexte=["red","black"]
+        self.couleursTexte=["black","red"]
         self.can=Canvas(self.fenetre,width=self.jeu.nbCol*self.c,height=self.jeu.nbLigne*self.c+self.StatusBar, bg="dark grey")
 
         self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
@@ -37,9 +37,18 @@ class GameEngine :
         self.can.bind("<Button-3>",self.fonc3)
         self.fenetre.mainloop()
 
-
+    def restart(self,end) :
+        end.destroy()
+        self.fenetre.destroy()
+        start()
     
-
+    def EndGame(self,status) :
+        end=Tk()
+        ending=Canvas(end,width=200,height=200, bg="pink")
+        ending.create_text(100,100,text=status,font=("Arial",20),fill="black")
+        ending.pack()
+        ending.bind("<Button-1>",self.restart(end))
+        end.mainloop()
        
     def montrerLesBombes(self):
             for i in range(self.jeu.nbLigne):
@@ -92,30 +101,18 @@ class GameEngine :
                 self.jeu.revelation[y//50][x//50]=True
                 if self.jeu.grille[y//50][x//50]==-1 :
                     self.montrerLesBombes()
-                    perdu=Tk()
-                    perducan=Canvas(perdu,width=500,height=500, bg="pink")
-                    perducan.create_text(250,250,text="Perdu",font=("Arial",50),fill="white")
-                    perducan.pack()
-                    perdu.mainloop()
+                    self.EndGame("Perdu")
                 elif self.jeu.grille[y//50][x//50] == 0 :
                     self.revelerCasesAutour(y//50,x//50)
                     self.can.create_rectangle(x,y,x+50,y+50,fill="light grey")
                     if self.jeu.jeuGagne() :
-                        gagne=Tk()
-                        gagnecan=Canvas(gagne,width=500,height=500, bg="pink")
-                        gagnecan.create_text(250,250,text="Gagné",font=("Arial",50),fill="white")
-                        gagnecan.pack()
-                        gagne.mainloop()
+                        self.EndGame("Gagné")
                     
                 else :
                     self.can.create_rectangle(x,y,x+50,y+50,fill="light grey")
                     self.can.create_text(x+25,y+25,text=self.jeu.grille[y//50][x//50],fill=self.couleurs[self.jeu.grille[y//50][x//50]-1],font=("Arial",20))
                     if self.jeu.jeuGagne() :
-                        gagne=Tk()
-                        gagnecan=Canvas(gagne,width=500,height=500, bg="pink")
-                        gagnecan.create_text(250,250,text="Gagné",font=("Arial",50),fill="white")
-                        gagnecan.pack()
-                        gagne.mainloop()
+                        self.EndGame("Gagné")
 
 
 
@@ -131,7 +128,7 @@ class GameEngine :
                 self.jeu.nbDrapeaux-=1
                 self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
                 self.can.create_image(self.c,self.jeu.nbLigne*self.c+self.StatusBar/2, anchor=CENTER, image=self.drapeau)
-                self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill="black",font=("Arial",15))
+                self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill=self.couleursTexte[self.jeu.nbDrapeaux//self.jeu.nbBombes],font=("Arial",15))
                 self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="light sea green")
                 self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="HotPink3")
                 self.can.create_text(self.jeu.nbCol*self.c//2,self.jeu.nbLigne*self.c+self.StatusBar/2,text="Changer de diffilculté",font=("Arial",10))
@@ -141,7 +138,7 @@ class GameEngine :
                 self.jeu.nbDrapeaux+=1
                 self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
                 self.can.create_image(self.c,self.jeu.nbLigne*self.c+self.StatusBar/2, anchor=CENTER, image=self.drapeau)
-                self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill="black",font=("Arial",15))
+                self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill=self.couleursTexte[self.jeu.nbDrapeaux//self.jeu.nbBombes],font=("Arial",15))
                 self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="light sea green")
                 self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="HotPink3")
                 self.can.create_text(self.jeu.nbCol*self.c//2,self.jeu.nbLigne*self.c+self.StatusBar/2,text="Changer de diffilculté",font=("Arial",10))
@@ -149,11 +146,7 @@ class GameEngine :
                 self.can.create_image(x,y,anchor=NW,image=self.drapeau)
                 
                 if self.jeu.jeuGagne() :
-                    gagne=Tk()
-                    gagnecan=Canvas(gagne,width=500,height=500, bg="pink")
-                    gagnecan.create_text(250,250,text="Gagné",font=("Arial",50),fill="white")
-                    gagnecan.pack()
-                    gagne.mainloop()
+                    self.EndGame("Gagné")
 
 ############################
                     
@@ -271,9 +264,9 @@ class start:
             if (x<=397 and y <=397 and x>=5 and y>=5 ) :
                 j=jeu(8,8,10)
             elif (x>=402 and x<=795 and y>=5 and y<=397) :
-                j=jeu(13,13,40)
+                j=jeu(13,13,30)
             elif (x>=5 and x<=397 and y>=402 and y<=795) :
-                j=jeu(17,17,75)
+                j=jeu(17,17,60)
             self.choix.destroy()
             GameEngine(j)
         return
