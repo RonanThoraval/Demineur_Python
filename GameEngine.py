@@ -44,10 +44,11 @@ class GameEngine :
     
     def EndGame(self,status) :
         end=Tk()
+        end.title("END")
         ending=Canvas(end,width=200,height=200, bg="pink")
         ending.create_text(100,100,text=status,font=("Arial",20),fill="black")
         ending.pack()
-        ending.bind("<Button-1>",self.restart(end))
+        #ending.bind("<Button-1>",self.restart(end))
         end.mainloop()
        
     def montrerLesBombes(self):
@@ -115,7 +116,14 @@ class GameEngine :
                         self.EndGame("Gagné")
 
 
-
+    def updateStatusBar(self) :
+            self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
+            self.can.create_image(self.c,self.jeu.nbLigne*self.c+self.StatusBar/2, anchor=CENTER, image=self.drapeau)
+            self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill=self.couleursTexte[self.jeu.nbDrapeaux//self.jeu.nbBombes],font=("Arial",15))
+            self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="light sea green")
+            self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="HotPink3")
+            self.can.create_text(self.jeu.nbCol*self.c//2,self.jeu.nbLigne*self.c+self.StatusBar/2,text="Changer de diffilculté",font=("Arial",10))
+            self.can.create_text(self.jeu.nbCol*self.c*(5/6),self.jeu.nbLigne*self.c+self.StatusBar/2,text="Nouvelle Partie",font=("Arial",10))
       
     def fonc3(self,event) :
         x,y=event.x,event.y
@@ -126,23 +134,11 @@ class GameEngine :
                 self.jeu.drapeaux[y//50][x//50]=False
                 self.can.create_rectangle(x,y,x+50,y+50,fill="dark grey")
                 self.jeu.nbDrapeaux-=1
-                self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
-                self.can.create_image(self.c,self.jeu.nbLigne*self.c+self.StatusBar/2, anchor=CENTER, image=self.drapeau)
-                self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill=self.couleursTexte[self.jeu.nbDrapeaux//self.jeu.nbBombes],font=("Arial",15))
-                self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="light sea green")
-                self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="HotPink3")
-                self.can.create_text(self.jeu.nbCol*self.c//2,self.jeu.nbLigne*self.c+self.StatusBar/2,text="Changer de diffilculté",font=("Arial",10))
-                self.can.create_text(self.jeu.nbCol*self.c*(5/6),self.jeu.nbLigne*self.c+self.StatusBar/2,text="Nouvelle Partie",font=("Arial",10))
+                self.updateStatusBar()
             else :
                 self.jeu.drapeaux[y//50][x//50]=True
                 self.jeu.nbDrapeaux+=1
-                self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
-                self.can.create_image(self.c,self.jeu.nbLigne*self.c+self.StatusBar/2, anchor=CENTER, image=self.drapeau)
-                self.can.create_text(2*self.c,self.jeu.nbLigne*self.c+self.StatusBar/2,text=str(self.jeu.nbDrapeaux)+"/"+str(self.jeu.nbBombes),fill=self.couleursTexte[self.jeu.nbDrapeaux//self.jeu.nbBombes],font=("Arial",15))
-                self.can.create_rectangle(self.jeu.nbCol*self.c*(1/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c*(2/3)-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="light sea green")
-                self.can.create_rectangle(self.jeu.nbCol*self.c*(2/3)+2,self.jeu.nbLigne*self.c+3,self.jeu.nbCol*self.c-2,self.jeu.nbLigne*self.c+self.StatusBar-3,fill="HotPink3")
-                self.can.create_text(self.jeu.nbCol*self.c//2,self.jeu.nbLigne*self.c+self.StatusBar/2,text="Changer de diffilculté",font=("Arial",10))
-                self.can.create_text(self.jeu.nbCol*self.c*(5/6),self.jeu.nbLigne*self.c+self.StatusBar/2,text="Nouvelle Partie",font=("Arial",10))
+                self.updateStatusBar()
                 self.can.create_image(x,y,anchor=NW,image=self.drapeau)
                 
                 if self.jeu.jeuGagne() :
