@@ -114,7 +114,7 @@ class GameEngine :
     def updateStatusBar(self) :
             self.can.create_rectangle(0,self.game.nbRows*self.c,self.game.nbCols*self.c,self.game.nbRows*self.c+self.StatusBar,fill="grey")
             self.can.create_image(self.c,self.game.nbRows*self.c+self.StatusBar/2, anchor=CENTER, image=self.flag)
-            self.can.create_text(2*self.c,self.game.nbRows*self.c+self.StatusBar/2,text=str(self.game.nbFlags)+"/"+str(self.game.nbBombs),fill=self.textColors[((self.game.nbFlags))//self.game.nbBombs],font=("Arial",15))
+            self.can.create_text(2*self.c,self.game.nbRows*self.c+self.StatusBar/2,text=str(self.game.nbFlags)+"/"+str(self.game.nbBombs),fill=self.textColors[self.game.nbFlags>self.game.nbBombs],font=("Arial",15))
             self.can.create_rectangle(self.game.nbCols*self.c*(1/3)+2,self.game.nbRows*self.c+3,self.game.nbCols*self.c*(2/3)-2,self.game.nbRows*self.c+self.StatusBar-3,fill="light sea green")
             self.can.create_rectangle(self.game.nbCols*self.c*(2/3)+2,self.game.nbRows*self.c+3,self.game.nbCols*self.c-2,self.game.nbRows*self.c+self.StatusBar-3,fill="HotPink3")
             self.can.create_text(self.game.nbCols*self.c//2,self.game.nbRows*self.c+self.StatusBar/2,text="Changer de diffilculté",font=("Arial",8))
@@ -161,7 +161,7 @@ class start:
         self.canchoix.create_text(200,200,fill="black",text="Facile : 8x8",font=("Arial",25))
         self.canchoix.create_text(600,200,fill="grey35",text="Moyen : 13x13",font=("Arial",25))
         self.canchoix.create_text(200,600,fill="white",text="Difficile : 17x17",font=("Arial",25))
-        self.canchoix.create_text(600,600,fill="dark slate blue",text="game personnalisable",font=("Arial",25))
+        self.canchoix.create_text(600,600,fill="dark slate blue",text="Jeu personnalisable",font=("Arial",25))
         
         self.canchoix.pack()
         
@@ -225,7 +225,7 @@ class start:
         ###Perso3###
         def i():
             perso3=Tk()
-            perso3.title("Choix du nombre de bombs")
+            perso3.title("Choix du nombre de bombes")
             canPerso3=Label(perso3,text="Paramètres")
             canPerso3.grid(row=0, columnspan=2, pady=8)
 
