@@ -1,5 +1,6 @@
 from tkinter import *
 from Game import *
+from time import time
 
 
 class GameEngine :
@@ -8,16 +9,18 @@ class GameEngine :
         
         self.jeu=jeu
         self.fenetre=Tk()
+        self.width=800
+        self.height=800
         self.fenetre.title("Démineur")
         self.StatusBar=70
-        self.c=50
+        self.c=self.height/self.jeu.nbLigne
         self.bombe=PhotoImage(file="bombe.png")
         self.drapeau=PhotoImage(file="drap.png")
         self.estLePremierMouv=True
 
         self.couleurs=["blue","green","red","purple","yellow","orange","white","brown"]
         self.couleursTexte=["black","red"]
-        self.can=Canvas(self.fenetre,width=self.jeu.nbCol*self.c,height=self.jeu.nbLigne*self.c+self.StatusBar, bg="dark grey")
+        self.can=Canvas(self.fenetre,width=self.width,height=self.height+self.StatusBar, bg="dark grey")
 
         self.can.create_rectangle(0,self.jeu.nbLigne*self.c,self.jeu.nbCol*self.c,self.jeu.nbLigne*self.c+self.StatusBar,fill="grey")
         self.can.create_image(self.c,self.jeu.nbLigne*self.c+self.StatusBar/2, anchor=CENTER, image=self.drapeau)
@@ -35,7 +38,21 @@ class GameEngine :
         self.can.pack()
         self.can.bind("<Button-1>",self.fonc1)
         self.can.bind("<Button-3>",self.fonc3)
+
+        ### Timer
+        self.clock_label = Label(self.fenetre, bg="green", fg="white", font = ("Times", 20), relief='flat')
+        self.clock_label.place(x = 0, y = 400)
+        self.start_time=time()
+        self.update_timer()
         self.fenetre.mainloop()
+
+    def update_timer(self):
+        if self.jeu.jeuGagne() :
+            return
+        delta=int(time()-self.start_time)
+        time_string='{:02}:{:02}'.format(*divmod(delta, 60))
+        self.clock_label.configure(text=time_string)
+        self.clock_label.after(1000, self.update_timer)
 
     def restart(self,end) :
         end.destroy()
