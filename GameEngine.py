@@ -36,7 +36,7 @@ class GameEngine :
 
         ##StatusBar
         self.can.create_rectangle(0,self.game.nbRows*self.c,self.game.nbCols*self.c,self.game.nbRows*self.c+self.StatusBar,fill="grey")
-        self.can.create_image(10,810, anchor=NW, image=self.flagBar)
+        self.can.create_image(10,self.c*self.game.nbRows+10, anchor=NW, image=self.flagBar)
         self.flagsLabel = Label(self.window, bg="grey", fg=self.textColors[self.game.nbFlags>self.game.nbBombs],text=str(self.game.nbFlags)+"/"+str(self.game.nbBombs),font=("Times",20))
         self.flagsLabel.place(x=90,y=self.c*self.game.nbRows+self.StatusBar//2+5, anchor=CENTER)
         self.can.create_rectangle(self.game.nbCols*self.c*(1/3)+2,self.game.nbRows*self.c+3,self.game.nbCols*self.c*(2/3)-2,self.game.nbRows*self.c+self.StatusBar-3,fill="light sea green")
