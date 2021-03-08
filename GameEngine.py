@@ -28,21 +28,21 @@ class GameEngine :
         self.can.pack()
         
 
-        for i in range(self.game.nbRows) :
+        for i in range(self.game.nbRows+1) :
             self.can.create_line(0,i*self.c,self.game.nbCols*self.c,i*self.c, fill="black")
 
-        for j in range(self.game.nbCols) :
+        for j in range(self.game.nbCols+1) :
             self.can.create_line(j*self.c,0,j*self.c,self.game.nbRows*self.c,fill="black")
 
         ##StatusBar
-        self.can.create_rectangle(0,self.game.nbRows*self.c,self.game.nbCols*self.c,self.game.nbRows*self.c+self.StatusBar,fill="grey")
+        self.can.create_rectangle(0,self.game.nbRows*self.c,self.width,self.game.nbRows*self.c+self.StatusBar,fill="grey")
         self.can.create_image(10,self.c*self.game.nbRows+10, anchor=NW, image=self.flagBar)
         self.flagsLabel = Label(self.window, bg="grey", fg=self.textColors[self.game.nbFlags>self.game.nbBombs],text=str(self.game.nbFlags)+"/"+str(self.game.nbBombs),font=("Times",20))
         self.flagsLabel.place(x=90,y=self.c*self.game.nbRows+self.StatusBar//2+5, anchor=CENTER)
-        self.can.create_rectangle(self.game.nbCols*self.c*(1/3)+2,self.game.nbRows*self.c+3,self.game.nbCols*self.c*(2/3)-2,self.game.nbRows*self.c+self.StatusBar-3,fill="light sea green")
-        self.can.create_rectangle(self.game.nbCols*self.c*(2/3)+2,self.game.nbRows*self.c+3,self.game.nbCols*self.c-2,self.game.nbRows*self.c+self.StatusBar-3,fill="HotPink3")
-        self.can.create_text(self.game.nbCols*self.c//2,self.game.nbRows*self.c+self.StatusBar/2+5,text="Changer de diffilculté",font=("Times",15))
-        self.can.create_text(self.game.nbCols*self.c*(5/6),self.game.nbRows*self.c+self.StatusBar/2+5,text="Nouvelle Partie",font=("Times",15))
+        self.can.create_rectangle(self.width*(1/3)+2,self.game.nbRows*self.c+3,self.height*(2/3)-2,self.game.nbRows*self.c+self.StatusBar-3,fill="light sea green")
+        self.can.create_rectangle(self.width*(2/3)+2,self.game.nbRows*self.c+3,self.width-2,self.game.nbRows*self.c+self.StatusBar-3,fill="HotPink3")
+        self.can.create_text(self.width//2,self.game.nbRows*self.c+self.StatusBar/2+5,text="Changer de diffilculté",font=("Times",15))
+        self.can.create_text(self.width*(5/6),self.game.nbRows*self.c+self.StatusBar/2+5,text="Nouvelle Partie",font=("Times",15))
 
         
         ### Timer
@@ -112,13 +112,13 @@ class GameEngine :
             x,y=event.x,event.y
             
             #Nouvelle Partie
-            if (x>=self.game.nbCols*self.c*(2/3)+1 and y>=self.game.nbRows*self.c ) :
+            if (x>=self.width*(2/3)+1 and y>=self.game.nbRows*self.c ) :
                 self.window.destroy()
                 j=game(self.game.nbCols,self.game.nbRows,self.game.nbBombs)
                 GameEngine(j)
                 return
             #Changer de difficulté
-            if(y>=self.game.nbRows*self.c and x>=self.game.nbCols*self.c*(1/3)+1 and x<=self.game.nbCols*self.c*(2/3)-1):
+            if(y>=self.game.nbRows*self.c and x>=self.width*(1/3)+1 and x<=self.width*self.c*(2/3)-1):
                 self.window.destroy()
                 start()
                 return
