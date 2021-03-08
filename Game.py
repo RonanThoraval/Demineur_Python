@@ -1,23 +1,23 @@
 from tkinter import *
 import random
 
-class jeu :
-    def __init__(self,nbCol=17,nbLigne=17,nbBombes=50) :
-        self.nbCol=nbCol
-        self.nbLigne=nbLigne
-        self.nbBombes=nbBombes
-        self.nbDrapeaux=0
+class game :
+    def __init__(self,nbCols=17,nbRows=17,nbBombs=50) :
+        self.nbCols=nbCols
+        self.nbRows=nbRows
+        self.nbBombs=nbBombs
+        self.nbFlags=0
         
-        self.revelation=[[False for i in range(nbCol)] for j in range(nbLigne)]
-        self.grille=[[0 for i in range(nbCol)] for j in range(nbLigne)]
-        self.drapeaux=[[False for i in range(nbCol)] for j in range(nbLigne)]
+        self.revelation=[[False for i in range(nbCols)] for j in range(nbRows)]
+        self.grille=[[0 for i in range(nbCols)] for j in range(nbRows)]
+        self.flags=[[False for i in range(nbCols)] for j in range(nbRows)]
         
 
 
-    def jeuGagne(self) :
-            for i in range(self.nbLigne) :
-                for j in range(self.nbCol) :
-                    if self.grille[i][j]!=-1 and not(self.revelation[i][j]) or self.grille[i][j]==-1 and not(self.drapeaux[i][j]):
+    def hasWon(self) :
+            for i in range(self.nbRows) :
+                for j in range(self.nbCols) :
+                    if self.grille[i][j]!=-1 and not(self.revelation[i][j]) or self.grille[i][j]==-1 and not(self.flags[i][j]):
                         return False
             return True
 
@@ -50,16 +50,16 @@ class jeu :
     #-1 bombe
     def CreationGrille(self,a,b) :
         l=self.PositionsAutour(a,b)
-        for i in range(self.nbBombes) :
-            x=random.randint(0,self.nbLigne-1)
-            y=random.randint(0,self.nbCol-1)
+        for i in range(self.nbBombs) :
+            x=random.randint(0,self.nbRows-1)
+            y=random.randint(0,self.nbCols-1)
             while (self.grille[x][y]==-1 or (x==a and y==b) or ([x,y] in l)) :
-                x=random.randint(0,self.nbLigne-1)
-                y=random.randint(0,self.nbCol-1)
+                x=random.randint(0,self.nbRows-1)
+                y=random.randint(0,self.nbCols-1)
             self.grille[x][y]=-1
 
-        for i in range(self.nbLigne) :
-            for j in range(self.nbCol) :
+        for i in range(self.nbRows) :
+            for j in range(self.nbCols) :
                 if self.grille[i][j]!=-1 :
                     self.grille[i][j]=self.compterBombes(i,j)
 
