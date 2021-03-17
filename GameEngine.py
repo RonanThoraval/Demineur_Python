@@ -5,10 +5,10 @@ from time import time
 
 class GameEngine :
 
-    def __init__(self,game) :
+    def __init__(self,game,window) :
         
         self.game=game
-        self.window=Tk()
+        self.window=window
         self.window.title("Démineur")
         self.width=800
         self.height=800
@@ -60,6 +60,10 @@ class GameEngine :
         
         self.window.mainloop()
 
+    def cleanWindow(self) :
+        self.can.destroy()
+        self.clock_label.destroy()
+        self.flagsLabel.destroy()
         
         
     def update_timer(self):
@@ -71,18 +75,18 @@ class GameEngine :
         self.clock_label.after(1000, self.update_timer)
 
     def restart(self,end) :
-        end.destroy()
+        #end.destroy()
         self.window.destroy()
         start()
     
     def EndGame(self,status) :
         self.isOver=True
-        end=Tk()
-        end.title("END")
-        ending=Canvas(end,width=200,height=200, bg="pink")
-        ending.create_text(100,100,text=status,font=("Arial",20),fill="black")
-        ending.pack()
-        end.mainloop()
+        #end=Tk()
+        #end.title("END")
+        #ending=Canvas(end,width=200,height=200, bg="pink")
+        self.can.create_text(self.width//2,self.height//2,text=status,font=("Arial",self.width//10),fill="black")
+        #ending.pack()
+        #end.mainloop()
        
     def showBombs(self):
             for i in range(self.game.nbRows):
@@ -94,11 +98,11 @@ class GameEngine :
     def revealCasesAround(self,y,x) :
                 l=self.game.PositionsAutour(y,x)
                 for m in l :
-                    if self.game.grille[m[0]][m[1]]== 0 and self.game.revelation[m[0]][m[1]]==False :
+                    if self.game.grille[m[0]][m[1]]== 0 and self.game.revelation[m[0]][m[1]]==False and self.game.flags[m[0]][m[1]]==False:
                         self.game.revelation[m[0]][m[1]]=True
                         self.can.create_rectangle(m[1]*self.c,m[0]*self.c,m[1]*self.c+self.c,m[0]*self.c+self.c,fill="light grey")
                         self.revealCasesAround(m[0],m[1])
-                    elif self.game.revelation[m[0]][m[1]]==False :
+                    elif self.game.revelation[m[0]][m[1]]==False and self.game.flags[m[0]][m[1]]==False:
                         self.game.revelation[m[0]][m[1]]=True
                         self.can.create_rectangle(m[1]*self.c,m[0]*self.c,m[1]*self.c+self.c,m[0]*self.c+self.c,fill="light grey")
                         self.can.create_text(m[1]*self.c+self.c/2,m[0]*self.c+self.c/2,text=self.game.grille[m[0]][m[1]],fill=self.colors[self.game.grille[m[0]][m[1]]-1],font=("Arial",(2*self.c)//5))
@@ -113,14 +117,14 @@ class GameEngine :
             
             #Nouvelle Partie
             if (x>=self.width*(2/3)+1 and y>=self.game.nbRows*self.c ) :
-                self.window.destroy()
                 j=game(self.game.nbCols,self.game.nbRows,self.game.nbBombs)
-                GameEngine(j)
+                self.cleanWindow()
+                GameEngine(j,self.window)
                 return
             #Changer de difficulté
             if(y>=self.game.nbRows*self.c and x>=self.width*(1/3)+1 and x<=self.width*self.c*(2/3)-1):
-                self.window.destroy()
-                start()
+                self.cleanWindow()
+                start(self.window)
                 return
             #Sur la status bar
             if y>=self.game.nbRows*self.c :
@@ -183,9 +187,9 @@ class GameEngine :
 
 
 class start:
-    def __init__(self) :
+    def __init__(self,choix) :
         
-        self.choix=Tk()
+        self.choix=choix
         self.choix.title("Menu des tailles")
         self.canchoix=Canvas(self.choix,width=800,height=800, bg="black")
         self.canchoix.create_rectangle(5,5,397,397,fill="white")
@@ -203,7 +207,11 @@ class start:
     
         
         self.choix.mainloop()
+
+    def cleanWindow(self) :
+        self.canchoix.destroy()
         
+    
     def f(self) :
         tab=[]
 
@@ -266,8 +274,8 @@ class start:
             def g3(event) :
                 tab.append(int(rep3.get()))
                 perso3.destroy()
-                self.choix.destroy()
-                GameEngine(game(tab[0],tab[1],tab[2]))
+                self.cleanWindow()
+                GameEngine(game(tab[0],tab[1],tab[2]),self.choix)
 
 
             lbl_reponse = Label(perso3, text="Nombre de bombs : ")
@@ -292,14 +300,14 @@ class start:
                 j=game(13,13,30)
             elif (x>=5 and x<=397 and y>=402 and y<=795) :
                 j=game(17,17,60)
-            self.choix.destroy()
-            GameEngine(j)
+            self.cleanWindow()
+            GameEngine(j,self.choix)
         return
         
         
 
-    
-start()
+window=Tk()
+start(window)
 
 ######################################################################################################
 ######################################################################################################

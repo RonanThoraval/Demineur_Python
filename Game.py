@@ -2,7 +2,7 @@ from tkinter import *
 import random
 
 class game :
-    def __init__(self,nbCols=17,nbRows=17,nbBombs=50) :
+    def __init__(self,nbRows=17,nbCols=17,nbBombs=50) :
         self.nbCols=nbCols
         self.nbRows=nbRows
         self.nbBombs=nbBombs
