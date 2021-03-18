@@ -10,10 +10,11 @@ class GameEngine :
         self.game=game
         self.window=Tk()
         self.window.title("Démineur")
-        self.width=800
-        self.height=800
+        size=800
+        self.c=size//min(self.game.nbRows,self.game.nbCols)
         self.StatusBar=70
-        self.c=self.height//max(self.game.nbRows,self.game.nbCols)
+        self.width=self.c*self.game.nbCols
+        self.height=self.c*self.game.nbRows
         self.bomb=PhotoImage(file="bombe.png")
         self.flag=PhotoImage(file="drap.png")
         self.flagBar=PhotoImage(file="drap.png")
@@ -50,7 +51,7 @@ class GameEngine :
         self.clock_label.place(x = 200, y = self.c*self.game.nbRows+self.StatusBar//2+5, anchor=CENTER)
         self.start_time=time()
         self.update_timer()
-
+    
         #Resizing flag and bomb image in function of game size
         self.flag=self.flag.zoom(self.c,self.c)
         self.flag=self.flag.subsample(50,50)
@@ -113,12 +114,14 @@ class GameEngine :
             
             #Nouvelle Partie
             if (x>=self.width*(2/3)+1 and y>=self.game.nbRows*self.c ) :
+                self.window.after_cancel(self.update_timer)
                 self.window.destroy()
                 j=game(self.game.nbCols,self.game.nbRows,self.game.nbBombs)
                 GameEngine(j)
                 return
             #Changer de difficulté
             if(y>=self.game.nbRows*self.c and x>=self.width*(1/3)+1 and x<=self.width*self.c*(2/3)-1):
+                self.window.after_cancel(self.update_timer)
                 self.window.destroy()
                 start()
                 return
